@@ -4,3 +4,4 @@ https://www.youtube.com/watch?v=MMxFDaIOHsE&list=PLzMcBGfZo4-lwGZWXz5Qgta_YNX3_v
 
 NEAT module documentation 
 https://neat-python.readthedocs.io/en/latest/neat_overview.html
+http://nn.cs.utexas.edu/downloads/papers/stanley.cec02.pdf
