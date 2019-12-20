@@ -9,11 +9,12 @@ http://nn.cs.utexas.edu/downloads/papers/stanley.cec02.pdf
 
 Run 
 ``` 
-pip3 install -r requirement.txt
+pip install -r requirement.txt
+pip uninstall -r removal.txt
 ```
-to install needed libraries. <br>
+to install required libraries and uninstall conflicted library. <br>
 And then
 ```
-python3 flappybird.py
+python flappybird.py
 ```
 to run the game
