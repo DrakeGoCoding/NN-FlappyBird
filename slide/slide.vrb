@@ -1,0 +1,18 @@
+\frametitle{\textbf {FLAPPY BIRD}}
+\framesubtitle{\textbf{Evaluate a genome and draw window}}}
+    \begin{itemize}
+        \item Draw window \\
+            \begin{lstlisting}[language=Python]
+    # Draw window
+def draw_window(win, birds, pipes, base, score, GEN, pipe_ind):
+    if GEN == 0:
+        GEN = 1
+    win.blit(BG_IMG, (0,0))
+    for pipe in pipes:
+        pipe.draw(win)
+    base.draw(win)
+    for bird in birds:
+        bird.draw(win)
+    pygame.display.update()
+            \end{lstlisting}
+    \end{itemize}
