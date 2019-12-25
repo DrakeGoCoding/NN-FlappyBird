@@ -20,13 +20,17 @@ PIPE_IMG = pygame.transform.scale(pygame.image.load(os.path.join("img","pipe.png
 BASE_IMG = pygame.transform.scale(pygame.image.load(os.path.join("img","base.png")),(400,112))
 BG_IMG = pygame.transform.scale(pygame.image.load(os.path.join("img","bg.png")),(400,600))
 
-DRAW_LINES = True
+DRAW_LINES = False
+
+speed = 1
+highest_score = 0
 
 class Bird:
+    global speed
     IMGS = BIRD_IMGS
-    MAX_ROTATION = 20
-    ROT_VEL = 10
-    ANIMATION_TIME = 5
+    MAX_ROTATION = 20 
+    ROT_VEL = 10 * speed 
+    ANIMATION_TIME = 5 / speed
 
     #Initialize the bird
     def __init__(self, x, y):
@@ -94,8 +98,9 @@ class Bird:
 
 
 class Pipe :
+    global speed
     GAP = 120
-    VEL = 5
+    VEL = 5 * speed
 
     def __init__(self, x):
         self.x = x
@@ -144,7 +149,8 @@ class Pipe :
 
 
 class Base:
-    VEL = 5
+    global speed
+    VEL = 5 * speed
     WIDTH = BASE_IMG.get_width()
     IMG = BASE_IMG
 
@@ -168,6 +174,7 @@ class Base:
         win.blit(self.IMG, (self.x1, self.y))
         win.blit(self.IMG, (self.x2, self.y))
             
+
 def draw_window(win, birds, pipes, base, score, GEN, pipe_ind):
     if GEN == 0:
         GEN = 1
@@ -175,7 +182,7 @@ def draw_window(win, birds, pipes, base, score, GEN, pipe_ind):
     for pipe in pipes:
         pipe.draw(win)
     base.draw(win)
-    
+    # global highest_score
     #score
     text = STAT_FONT.render("Score: " + str(score),1,(255,255,255))
     win.blit(text,(WIN_WIDTH - 10 - text.get_width(), 10))
@@ -185,6 +192,9 @@ def draw_window(win, birds, pipes, base, score, GEN, pipe_ind):
     #alive
     text = STAT_FONT.render("Alive: " + str(len(birds)),1,(255,255,255))
     win.blit(text,(10, 30))
+    #highest score
+    text = STAT_FONT.render("Highest score: " + str(highest_score),1,(255,255,255))
+    win.blit(text,(WIN_WIDTH - 10 - text.get_width(), 30))
 
     #draw lines from bird to pipes
     for bird in birds:
@@ -229,7 +239,7 @@ def eval_genomes(genomes, config):
     run = True
     
     while run and len(birds) > 0:
-        clock.tick(30)
+        clock.tick(30*speed)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -261,12 +271,12 @@ def eval_genomes(genomes, config):
         add_pipe = False
         rem = []
         for pipe in pipes:
-            for x, bird in enumerate(birds):
+            for index, bird in enumerate(birds):
                 if pipe.collide(bird):
-                    ge[x].fitness -= 1
-                    birds.pop(x)
-                    nets.pop(x)
-                    ge.pop(x)
+                    ge[index].fitness -= 1
+                    birds.pop(index)
+                    nets.pop(index)
+                    ge.pop(index)
                 if not pipe.passed and pipe.x < bird.x :
                     pipe.passed = True
                     add_pipe = True
@@ -294,8 +304,10 @@ def eval_genomes(genomes, config):
         draw_window(win, birds, pipes, base, score, GEN, pipe_ind)
         
         #break if score gets large enough
-        if score >= 50:
-            break
+        # if score >= 50:
+        #     break
+        global highest_score
+        if score > highest_score : highest_score = score
         
 
 #Run the NEAT algorithm to train a neural network to play
